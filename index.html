@@ -393,6 +393,31 @@
             background: linear-gradient(180deg, rgba(0,240,255,0.0), rgba(0,240,255,0.55), rgba(255,0,124,0.42), rgba(255,0,124,0.0));
             opacity: 0.78;
         }
+
+        .project-actions {
+            margin-top: 22px;
+        }
+        .project-link {
+            display: inline-block;
+            padding: 12px 18px;
+            border: 1px solid rgba(0, 240, 255, 0.48);
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.92rem;
+            letter-spacing: 0.8px;
+            background: rgba(0, 240, 255, 0.04);
+            transition: all 0.25s ease;
+            border-radius: 0;
+        }
+        .project-link:hover {
+            background: rgba(0, 240, 255, 0.12);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 18px rgba(0, 240, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+
         @media (max-width: 780px) {
             .section-head::after {
                 display: none;
@@ -576,6 +601,9 @@
 <span>Multimodal</span>
 <span>NLP / CV</span>
 <span>Data Fusion</span>
+</div>
+<div class="project-actions">
+<a class="project-link" href="https://scproj0126.github.io/cyberbully-detect-in-city-scale-smart-city/" target="_blank" rel="noopener">VISIT_PROJECT_SITE</a>
 </div>
 </article></div>
 </section>
