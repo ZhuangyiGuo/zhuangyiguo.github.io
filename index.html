@@ -268,8 +268,9 @@
         }
 
         .hero-hud {
+            position: relative;
             justify-self: end;
-            width: min(300px, 100%);
+            width: min(340px, 100%);
             padding: 14px 16px;
             border: 1px solid rgba(0,240,255,0.14);
             background: rgba(4, 16, 28, 0.22);
@@ -281,6 +282,9 @@
             line-height: 1.75;
             color: rgba(234,247,255,0.72);
             letter-spacing: 0.04em;
+            overflow: visible;
+            isolation: isolate;
+            z-index: 40;
         }
 
         .hero-hud::before {
@@ -288,9 +292,52 @@
             display: block;
             margin-bottom: 8px;
             color: rgba(0,240,255,0.82);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-hud::after {
+            content: "";
+            position: absolute;
+            inset: -18% -12%;
+            background:
+                radial-gradient(circle at 18% 28%, rgba(255, 170, 102, 0.18), transparent 28%),
+                radial-gradient(circle at 78% 24%, rgba(0, 240, 255, 0.12), transparent 34%),
+                radial-gradient(circle at 62% 80%, rgba(255, 0, 124, 0.10), transparent 36%);
+            opacity: 0.16;
+            filter: blur(18px);
+            animation: hudDrift 18s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-hud[data-tone="warm"]::after {
+            background:
+                radial-gradient(circle at 18% 28%, rgba(255, 170, 102, 0.26), transparent 30%),
+                radial-gradient(circle at 80% 76%, rgba(255, 0, 124, 0.13), transparent 34%),
+                radial-gradient(circle at 72% 22%, rgba(0, 240, 255, 0.08), transparent 30%);
+            opacity: 0.22;
+        }
+
+        .hero-hud[data-tone="cool"]::after {
+            background:
+                radial-gradient(circle at 20% 24%, rgba(0, 240, 255, 0.20), transparent 30%),
+                radial-gradient(circle at 78% 70%, rgba(21, 245, 186, 0.12), transparent 36%),
+                radial-gradient(circle at 74% 20%, rgba(110, 160, 255, 0.10), transparent 26%);
+            opacity: 0.20;
+        }
+
+        .hero-hud[data-tone="storm"]::after {
+            background:
+                radial-gradient(circle at 24% 24%, rgba(110, 160, 255, 0.24), transparent 32%),
+                radial-gradient(circle at 76% 72%, rgba(0, 240, 255, 0.18), transparent 34%),
+                radial-gradient(circle at 52% 56%, rgba(255, 255, 255, 0.06), transparent 26%);
+            opacity: 0.22;
         }
 
         .hud-line {
+            position: relative;
+            z-index: 1;
             display: flex;
             justify-content: space-between;
             gap: 14px;
@@ -306,6 +353,10 @@
             margin-top: 0;
         }
 
+        .hud-line.place-line {
+            align-items: center;
+        }
+
         .hud-label {
             color: rgba(155,181,200,0.92);
             white-space: nowrap;
@@ -314,6 +365,140 @@
         .hud-value {
             color: rgba(234,247,255,0.9);
             text-align: right;
+        }
+
+        .hud-rich {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .hud-text {
+            white-space: nowrap;
+        }
+
+        .hud-icon {
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(234,247,255,0.84);
+            flex: 0 0 auto;
+        }
+
+        .hud-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.1;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .moon-icon {
+            color: rgba(0,240,255,0.86);
+        }
+
+        .weather-icon-clear {
+            color: rgba(255, 201, 120, 0.92);
+        }
+
+        .weather-icon-cool {
+            color: rgba(165, 225, 255, 0.9);
+        }
+
+        .weather-icon-storm {
+            color: rgba(185, 210, 255, 0.92);
+        }
+
+        .hud-place {
+            min-width: 170px;
+        }
+
+        .place-picker {
+            position: relative;
+        }
+
+        .place-picker summary {
+            list-style: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            cursor: pointer;
+            color: rgba(234,247,255,0.9);
+            user-select: none;
+        }
+
+        .place-picker summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .place-current {
+            white-space: nowrap;
+        }
+
+        .place-chevron {
+            color: rgba(0,240,255,0.78);
+            transition: transform 0.22s ease;
+        }
+
+        .place-picker[open] .place-chevron {
+            transform: rotate(180deg);
+        }
+
+        .place-picker[open] {
+            z-index: 999;
+        }
+
+        .place-menu {
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 8px);
+            top: auto;
+            width: 228px;
+            max-height: min(300px, 48vh);
+            overflow-y: auto;
+            padding: 6px;
+            background: rgba(5, 18, 30, 0.98);
+            border: 1px solid rgba(0,240,255,0.18);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.03);
+            z-index: 999;
+        }
+
+        .place-option {
+            width: 100%;
+            display: block;
+            padding: 9px 10px;
+            border: none;
+            background: transparent;
+            color: rgba(234,247,255,0.84);
+            text-align: left;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            transition: background 0.18s ease, color 0.18s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .place-option:hover,
+        .place-option[aria-current="true"] {
+            background: rgba(0, 240, 255, 0.08);
+            color: rgba(234,247,255,0.98);
+        }
+
+        .place-option.visitor-option {
+            margin-top: 4px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            color: rgba(0,240,255,0.88);
         }
 
         .eyebrow {
@@ -430,6 +615,10 @@
 
         @keyframes typing { from { width: 0 } to { width: 100% } }
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--neon-green); } }
+        @keyframes hudDrift {
+            0% { transform: translate3d(-3%, -2%, 0) scale(1); }
+            100% { transform: translate3d(3%, 2%, 0) scale(1.08); }
+        }
 
         @media (max-width: 780px) {
             .hero-layout { grid-template-columns: 1fr; }
@@ -437,6 +626,9 @@
                 justify-self: stretch;
                 width: 100%;
                 margin-top: 22px;
+            }
+            .place-menu {
+                width: min(100%, 240px);
             }
             .section-head::after { display: none; }
             .elevator-bg {
@@ -475,7 +667,7 @@
 </div>
 </header>
 <main class="container" id="top">
-<section class="reveal" id="about" style="min-height: 80vh; display: flex; align-items: center;"><div class="hero-layout"><div class="hero-copy"><h1 class="glitch-text" data-text="HELLO, I'M Zhuangyi Guo">HELLO, I'M Zhuangyi Guo</h1><div class="role-title">COMPUTER_SCIENCE &amp;&amp; SMART_CITY_APPLICATIONS</div><p class="bio">I am a postgraduate student working across computer science, data science, smart-city technology applications, software development, and interactive digital design. My background combines programming, analytics, interface prototyping, academic project development, and multimedia production.</p><p class="bio">I enjoy building projects that connect technical implementation with practical real-world use, especially in AI systems, data-driven applications, user experience, and visually expressive digital experiences.</p><a class="btn" href="./doc/resume.pdf" target="_blank" rel="noopener">VIEW_RESUME.pdf</a></div><aside aria-label="Local ambient panel" class="hero-hud"><div class="hud-line"><span class="hud-label">LOCAL TIME</span><strong class="hud-value" id="hudTime">--:-- HKT</strong></div><div class="hud-line"><span class="hud-label">WEATHER</span><strong class="hud-value" id="hudWeather">--°C · HONG KONG</strong></div><div class="hud-line"><span class="hud-label">MOON PHASE</span><strong class="hud-value" id="hudMoon">LOADING...</strong></div><div class="hud-line"><span class="hud-label">NETWORK</span><strong class="hud-value" id="hudNetwork">VISITOR NODE ACTIVE</strong></div></aside></div></section>
+<section class="reveal" id="about" style="min-height: 80vh; display: flex; align-items: center;"><div class="hero-layout"><div class="hero-copy"><h1 class="glitch-text" data-text="HELLO, I'M Zhuangyi Guo">HELLO, I'M Zhuangyi Guo</h1><div class="role-title">COMPUTER_SCIENCE &amp;&amp; SMART_CITY_APPLICATIONS</div><p class="bio">I am a postgraduate student working across computer science, data science, smart-city technology applications, software development, and interactive digital design. My background combines programming, analytics, interface prototyping, academic project development, and multimedia production.</p><p class="bio">I enjoy building projects that connect technical implementation with practical real-world use, especially in AI systems, data-driven applications, user experience, and visually expressive digital experiences.</p><a class="btn" href="./doc/resume.pdf" target="_blank" rel="noopener">VIEW_RESUME.pdf</a></div><aside aria-label="Local ambient panel" class="hero-hud" data-tone="cool"><div class="hud-line"><span class="hud-label">LOCAL TIME</span><strong class="hud-value" id="hudTime">--:-- GMT+8</strong></div><div class="hud-line"><span class="hud-label">WEATHER</span><strong class="hud-value hud-rich" id="hudWeather"><span aria-hidden="true" class="hud-icon weather-icon-cool" id="hudWeatherIcon"></span><span class="hud-text" id="hudWeatherText">LOADING · --°C</span></strong></div><div class="hud-line"><span class="hud-label">MOON PHASE</span><strong class="hud-value hud-rich" id="hudMoon"><span aria-hidden="true" class="hud-icon moon-icon" id="hudMoonIcon"></span><span class="hud-text" id="hudMoonText">LOADING...</span></strong></div><div class="hud-line"><span class="hud-label">NETWORK</span><strong class="hud-value" id="hudNetwork">VISITOR NODE ACTIVE</strong></div><div class="hud-line place-line"><span class="hud-label">PLACE</span><div class="hud-value hud-place"><details class="place-picker" id="placePicker"><summary><span class="place-current" id="placeLabel">HONG KONG</span><span aria-hidden="true" class="place-chevron">▾</span></summary><div class="place-menu" role="listbox" aria-label="Place selection"><button class="place-option" data-place="HONG_KONG" type="button">HONG KONG</button><button class="place-option" data-place="SHENZHEN" type="button">SHENZHEN</button><button class="place-option" data-place="TORONTO" type="button">TORONTO</button><button class="place-option" data-place="KITCHENER_WATERLOO" type="button">KITCHENER-WATERLOO</button><button class="place-option" data-place="VANCOUVER" type="button">VANCOUVER</button><button class="place-option" data-place="NIAGARA_FALLS" type="button">NIAGARA FALLS</button><button class="place-option" data-place="NEW_YORK" type="button">NEW YORK</button><button class="place-option" data-place="LOS_ANGELES" type="button">LOS ANGELES</button><button class="place-option" data-place="MIAMI" type="button">MIAMI</button><button class="place-option" data-place="SAN_FRANCISCO" type="button">SAN FRANCISCO</button><button class="place-option" data-place="SHANGHAI" type="button">SHANGHAI</button><button class="place-option visitor-option" data-place="VISITOR_LOCATION" type="button">USE VISITOR LOCATION</button></div></details></div></div></aside></div></section>
 <section class="reveal" id="interests">
 <div class="section-head">
 <div class="eyebrow">01 / INTERESTS</div>
@@ -615,19 +807,36 @@
         const bgMid = document.querySelector('.elevator-bg.mid');
         const bgGlow = document.querySelector('.elevator-bg.glow');
 
+        const heroHud = document.querySelector('.hero-hud');
         const hudTime = document.getElementById('hudTime');
         const hudWeather = document.getElementById('hudWeather');
+        const hudWeatherIcon = document.getElementById('hudWeatherIcon');
+        const hudWeatherText = document.getElementById('hudWeatherText');
         const hudMoon = document.getElementById('hudMoon');
+        const hudMoonIcon = document.getElementById('hudMoonIcon');
+        const hudMoonText = document.getElementById('hudMoonText');
+        const placePicker = document.getElementById('placePicker');
+        const placeLabel = document.getElementById('placeLabel');
+        const placeMenu = placePicker ? placePicker.querySelector('.place-menu') : null;
+        const placeOptions = Array.from(document.querySelectorAll('.place-option'));
 
-        // Fallback location if geolocation is unavailable
-        const HONG_KONG_FALLBACK = {
-            latitude: 22.3193,
-            longitude: 114.1694,
-            label: 'HONG KONG',
-            timezone: 'Asia/Hong_Kong'
+        const PRESET_LOCATIONS = {
+            HONG_KONG: { latitude: 22.3193, longitude: 114.1694, label: 'HONG KONG', timezone: 'Asia/Hong_Kong' },
+            SHENZHEN: { latitude: 22.5431, longitude: 114.0579, label: 'SHENZHEN', timezone: 'Asia/Shanghai' },
+            TORONTO: { latitude: 43.6532, longitude: -79.3832, label: 'TORONTO', timezone: 'America/Toronto' },
+            KITCHENER_WATERLOO: { latitude: 43.4516, longitude: -80.4925, label: 'KITCHENER-WATERLOO', timezone: 'America/Toronto' },
+            VANCOUVER: { latitude: 49.2827, longitude: -123.1207, label: 'VANCOUVER', timezone: 'America/Vancouver' },
+            NIAGARA_FALLS: { latitude: 43.0896, longitude: -79.0849, label: 'NIAGARA FALLS', timezone: 'America/Toronto' },
+            NEW_YORK: { latitude: 40.7128, longitude: -74.0060, label: 'NEW YORK', timezone: 'America/New_York' },
+            LOS_ANGELES: { latitude: 34.0522, longitude: -118.2437, label: 'LOS ANGELES', timezone: 'America/Los_Angeles' },
+            MIAMI: { latitude: 25.7617, longitude: -80.1918, label: 'MIAMI', timezone: 'America/New_York' },
+            SAN_FRANCISCO: { latitude: 37.7749, longitude: -122.4194, label: 'SAN FRANCISCO', timezone: 'America/Los_Angeles' },
+            SHANGHAI: { latitude: 31.2304, longitude: 121.4737, label: 'SHANGHAI', timezone: 'Asia/Shanghai' }
         };
 
+        const HONG_KONG_FALLBACK = PRESET_LOCATIONS.HONG_KONG;
         let clockTimer = null;
+        let activeTimeZone = HONG_KONG_FALLBACK.timezone;
 
         const weatherCodeMap = {
             0: 'CLEAR',
@@ -660,7 +869,6 @@
             99: 'SEVERE THUNDERSTORM'
         };
 
-        // Move the repeated SVG layers at different speeds
         function setLoopedBackground(scrollTop) {
             if (bgFar) bgFar.style.backgroundPosition = `center ${scrollTop * -0.12}px`;
             if (bgMid) bgMid.style.backgroundPosition = `center ${scrollTop * -0.22}px`;
@@ -695,21 +903,94 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        function getMoonPhaseName(date = new Date()) {
+        function getMoonPhaseData(date = new Date()) {
             const synodicMonth = 29.53058867;
             const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
             const daysSince = (date.getTime() - knownNewMoon) / 86400000;
             const phase = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
             const ratio = phase / synodicMonth;
 
-            if (ratio < 0.03 || ratio >= 0.97) return 'NEW MOON';
-            if (ratio < 0.22) return 'WAXING CRESCENT';
-            if (ratio < 0.28) return 'FIRST QUARTER';
-            if (ratio < 0.47) return 'WAXING GIBBOUS';
-            if (ratio < 0.53) return 'FULL MOON';
-            if (ratio < 0.72) return 'WANING GIBBOUS';
-            if (ratio < 0.78) return 'LAST QUARTER';
-            return 'WANING CRESCENT';
+            if (ratio < 0.03 || ratio >= 0.97) return { key: 'new', name: 'NEW MOON' };
+            if (ratio < 0.22) return { key: 'waxing-crescent', name: 'WAXING CRESCENT' };
+            if (ratio < 0.28) return { key: 'first-quarter', name: 'FIRST QUARTER' };
+            if (ratio < 0.47) return { key: 'waxing-gibbous', name: 'WAXING GIBBOUS' };
+            if (ratio < 0.53) return { key: 'full', name: 'FULL MOON' };
+            if (ratio < 0.72) return { key: 'waning-gibbous', name: 'WANING GIBBOUS' };
+            if (ratio < 0.78) return { key: 'last-quarter', name: 'LAST QUARTER' };
+            return { key: 'waning-crescent', name: 'WANING CRESCENT' };
+        }
+
+        function getMoonPhaseSvg(phaseKey) {
+            const lit = 'style="fill: currentColor; fill-opacity: 0.30; stroke: none;"';
+            const dark = 'style="fill: rgba(3, 12, 20, 0.86); stroke: none;"';
+
+            const icons = {
+                'new': '<svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.1"></circle><circle cx="9" cy="9" r="5.4" style="fill: rgba(3, 12, 20, 0.40); stroke: none;"></circle></svg>',
+                'waxing-crescent': '<svg viewBox="0 0 18 18" aria-hidden="true"><defs><clipPath id="moonClipWaxingCrescent"><circle cx="9" cy="9" r="6.1"></circle></clipPath></defs><circle cx="9" cy="9" r="6.1"></circle><circle cx="11.9" cy="9" r="5.35" ' + lit + ' clip-path="url(#moonClipWaxingCrescent)"></circle></svg>',
+                'first-quarter': '<svg viewBox="0 0 18 18" aria-hidden="true"><defs><clipPath id="moonClipFirstQuarter"><circle cx="9" cy="9" r="6.1"></circle></clipPath></defs><circle cx="9" cy="9" r="6.1"></circle><rect x="9" y="2.9" width="6.1" height="12.2" ' + lit + ' clip-path="url(#moonClipFirstQuarter)"></rect></svg>',
+                'waxing-gibbous': '<svg viewBox="0 0 18 18" aria-hidden="true"><defs><clipPath id="moonClipWaxingGibbous"><circle cx="9" cy="9" r="6.1"></circle></clipPath></defs><circle cx="9" cy="9" r="6.1"></circle><circle cx="9" cy="9" r="6.05" ' + lit + '></circle><circle cx="5.6" cy="9" r="5.25" ' + dark + ' clip-path="url(#moonClipWaxingGibbous)"></circle></svg>',
+                'full': '<svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6.1"></circle><circle cx="9" cy="9" r="5.35" ' + lit + '></circle></svg>',
+                'waning-gibbous': '<svg viewBox="0 0 18 18" aria-hidden="true"><defs><clipPath id="moonClipWaningGibbous"><circle cx="9" cy="9" r="6.1"></circle></clipPath></defs><circle cx="9" cy="9" r="6.1"></circle><circle cx="9" cy="9" r="6.05" ' + lit + '></circle><circle cx="12.4" cy="9" r="5.25" ' + dark + ' clip-path="url(#moonClipWaningGibbous)"></circle></svg>',
+                'last-quarter': '<svg viewBox="0 0 18 18" aria-hidden="true"><defs><clipPath id="moonClipLastQuarter"><circle cx="9" cy="9" r="6.1"></circle></clipPath></defs><circle cx="9" cy="9" r="6.1"></circle><rect x="2.9" y="2.9" width="6.1" height="12.2" ' + lit + ' clip-path="url(#moonClipLastQuarter)"></rect></svg>',
+                'waning-crescent': '<svg viewBox="0 0 18 18" aria-hidden="true"><defs><clipPath id="moonClipWaningCrescent"><circle cx="9" cy="9" r="6.1"></circle></clipPath></defs><circle cx="9" cy="9" r="6.1"></circle><circle cx="6.1" cy="9" r="5.35" ' + lit + ' clip-path="url(#moonClipWaningCrescent)"></circle></svg>'
+            };
+
+            return icons[phaseKey] || icons.full;
+        }
+
+        function getWeatherIconSvg(weatherCode) {
+            if (weatherCode === 0 || weatherCode === 1) {
+                return {
+                    toneClass: 'weather-icon-clear',
+                    svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="3.2"></circle><path d="M9 1.9v2"></path><path d="M9 14.1v2"></path><path d="M1.9 9h2"></path><path d="M14.1 9h2"></path><path d="M3.8 3.8l1.5 1.5"></path><path d="M12.7 12.7l1.5 1.5"></path><path d="M12.7 5.3l1.5-1.5"></path><path d="M3.8 14.2l1.5-1.5"></path></svg>'
+                };
+            }
+
+            if (weatherCode === 2) {
+                return {
+                    toneClass: 'weather-icon-clear',
+                    svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M6.3 6.2a2.6 2.6 0 0 1 4.6-1.4"></path><path d="M11.1 4.2l.5-1.5"></path><path d="M13.2 5.8l1.3-.8"></path><path d="M12.8 8.2h1.5"></path><path d="M4.6 12.4h7.7a2.5 2.5 0 0 0 .2-5 4 4 0 0 0-7.6 1.3A2.3 2.3 0 0 0 4.6 12.4Z"></path></svg>'
+                };
+            }
+
+            if ([45, 48].includes(weatherCode)) {
+                return {
+                    toneClass: 'weather-icon-cool',
+                    svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4.4 10.8h8.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5 1.2 2.1 2.1 0 0 0-1 3.6Z"></path><path d="M4.1 13.3h8.8"></path><path d="M5.2 15.2h6.6"></path></svg>'
+                };
+            }
+
+            if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(weatherCode)) {
+                return {
+                    toneClass: 'weather-icon-cool',
+                    svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4.4 9.6h8.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5 1.2 2.1 2.1 0 0 0-1 3.6Z"></path><path d="M6.4 12.3l-.8 2"></path><path d="M9 12.3l-.8 2"></path><path d="M11.6 12.3l-.8 2"></path></svg>'
+                };
+            }
+
+            if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+                return {
+                    toneClass: 'weather-icon-cool',
+                    svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4.4 9.4h8.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5 1.2 2.1 2.1 0 0 0-1 3.6Z"></path><path d="M6.4 12.4l-.8 1.4"></path><path d="M5.9 12.9l1 .8"></path><path d="M9 12.4l-.8 1.4"></path><path d="M8.5 12.9l1 .8"></path><path d="M11.6 12.4l-.8 1.4"></path><path d="M11.1 12.9l1 .8"></path></svg>'
+                };
+            }
+
+            if ([95, 96, 99].includes(weatherCode)) {
+                return {
+                    toneClass: 'weather-icon-storm',
+                    svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4.4 9.5h8.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5 1.2 2.1 2.1 0 0 0-1 3.6Z"></path><path d="M8.6 10.8l-1 2.2h1.6l-.8 2.1 2.4-3.2H9.2l.9-1.1"></path></svg>'
+                };
+            }
+
+            return {
+                toneClass: 'weather-icon-cool',
+                svg: '<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M4.4 10.6h8.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5 1.2 2.1 2.1 0 0 0-1 3.6Z"></path></svg>'
+            };
+        }
+
+        function getHudTone(weatherCode) {
+            if ([95, 96, 99].includes(weatherCode)) return 'storm';
+            if ([0, 1, 2].includes(weatherCode)) return 'warm';
+            return 'cool';
         }
 
         function formatTimeForZone(timeZone) {
@@ -728,11 +1009,15 @@
         }
 
         function startClock(timeZone) {
+            activeTimeZone = timeZone || HONG_KONG_FALLBACK.timezone;
             if (clockTimer) clearInterval(clockTimer);
 
             const renderClock = () => {
-                hudTime.textContent = formatTimeForZone(timeZone);
-                hudMoon.textContent = getMoonPhaseName(new Date());
+                hudTime.textContent = formatTimeForZone(activeTimeZone);
+                const moon = getMoonPhaseData(new Date());
+                hudMoonText.textContent = moon.name;
+                hudMoonIcon.innerHTML = getMoonPhaseSvg(moon.key);
+                hudMoon.title = moon.name;
             };
 
             renderClock();
@@ -751,6 +1036,49 @@
             }
         }
 
+        async function fetchApproxVisitorLocation() {
+            const providers = [
+                async () => {
+                    const res = await fetch('https://ipwho.is/?output=json');
+                    if (!res.ok) throw new Error('ipwho.is failed');
+                    const data = await res.json();
+                    if (!data.success || !Number.isFinite(Number(data.latitude)) || !Number.isFinite(Number(data.longitude))) {
+                        throw new Error('ipwho.is missing coordinates');
+                    }
+                    return {
+                        latitude: Number(data.latitude),
+                        longitude: Number(data.longitude),
+                        label: (data.city || data.region || data.country || 'VISITOR LOCATION').toUpperCase(),
+                        timezone: data.timezone?.id || HONG_KONG_FALLBACK.timezone
+                    };
+                },
+                async () => {
+                    const res = await fetch('https://ipapi.co/json/');
+                    if (!res.ok) throw new Error('ipapi failed');
+                    const data = await res.json();
+                    if (!Number.isFinite(Number(data.latitude)) || !Number.isFinite(Number(data.longitude))) {
+                        throw new Error('ipapi missing coordinates');
+                    }
+                    return {
+                        latitude: Number(data.latitude),
+                        longitude: Number(data.longitude),
+                        label: (data.city || data.region || data.country_name || 'VISITOR LOCATION').toUpperCase(),
+                        timezone: data.timezone || HONG_KONG_FALLBACK.timezone
+                    };
+                }
+            ];
+
+            for (const provider of providers) {
+                try {
+                    return await provider();
+                } catch (error) {
+                    console.warn('Approximate location provider failed:', error);
+                }
+            }
+
+            throw new Error('Approximate visitor location unavailable');
+        }
+
         async function fetchWeather(lat, lon) {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&timezone=auto`;
             const res = await fetch(url);
@@ -758,47 +1086,99 @@
             return res.json();
         }
 
-        async function applyHudLocation(lat, lon, fallbackLabel = 'LOCAL') {
-            try {
-                const [weatherData, label] = await Promise.all([
-                    fetchWeather(lat, lon),
-                    reverseGeocode(lat, lon).catch(() => fallbackLabel)
-                ]);
+        function setPlaceLabel(label) {
+            placeLabel.textContent = (label || HONG_KONG_FALLBACK.label).toUpperCase();
+        }
 
+        function setPlaceSelection(activeKey) {
+            placeOptions.forEach((option) => {
+                option.setAttribute('aria-current', option.dataset.place === activeKey ? 'true' : 'false');
+            });
+        }
+
+        function renderWeatherState(weatherCode, temperature, placeName) {
+            const condition = weatherCodeMap[weatherCode] || 'LOCAL WEATHER';
+            const icon = getWeatherIconSvg(weatherCode);
+
+            hudWeatherIcon.className = `hud-icon ${icon.toneClass}`;
+            hudWeatherIcon.innerHTML = icon.svg;
+            hudWeatherText.textContent = Number.isFinite(temperature)
+                ? `${condition} · ${Math.round(temperature)}°C`
+                : `${condition} · --°C`;
+            hudWeather.title = `${condition} • ${placeName}`;
+            heroHud.dataset.tone = getHudTone(weatherCode);
+        }
+
+        async function applyHudLocation({ latitude, longitude, label, timezone, resolveLabel = false, activeKey = 'HONG_KONG' }) {
+            setPlaceSelection(activeKey);
+            setPlaceLabel(label);
+
+            try {
+                const weatherData = await fetchWeather(latitude, longitude);
                 const temp = weatherData?.current?.temperature_2m;
                 const weatherCode = weatherData?.current?.weather_code;
-                const zone = weatherData?.timezone || HONG_KONG_FALLBACK.timezone;
-                const upperLabel = (label || fallbackLabel).toUpperCase();
-                const weatherText = Number.isFinite(temp) ? `${Math.round(temp)}°C · ${upperLabel}` : `--°C · ${upperLabel}`;
+                const zone = weatherData?.timezone || timezone || HONG_KONG_FALLBACK.timezone;
+                let displayLabel = (label || 'LOCAL').toUpperCase();
 
-                hudWeather.textContent = weatherText;
-                hudWeather.title = weatherCodeMap[weatherCode] || 'LOCAL WEATHER';
+                if (resolveLabel) {
+                    displayLabel = await reverseGeocode(latitude, longitude).catch(() => displayLabel);
+                    setPlaceLabel(displayLabel);
+                }
+
+                renderWeatherState(weatherCode, temp, displayLabel);
                 startClock(zone);
             } catch {
-                hudWeather.textContent = `--°C · ${fallbackLabel.toUpperCase()}`;
-                startClock(HONG_KONG_FALLBACK.timezone);
+                renderWeatherState(undefined, undefined, label || HONG_KONG_FALLBACK.label);
+                startClock(timezone || HONG_KONG_FALLBACK.timezone);
             }
         }
 
-        // Try the visitor's location first, then fall back to Hong Kong
-        function initHud() {
-            hudMoon.textContent = getMoonPhaseName(new Date());
+        async function applyPresetLocation(placeKey) {
+            const preset = PRESET_LOCATIONS[placeKey] || HONG_KONG_FALLBACK;
+            await applyHudLocation({
+                latitude: preset.latitude,
+                longitude: preset.longitude,
+                label: preset.label,
+                timezone: preset.timezone,
+                resolveLabel: false,
+                activeKey: placeKey
+            });
+        }
 
-            if (window.isSecureContext && navigator.geolocation) {
+        async function applyApproximateVisitorLocation() {
+            try {
+                const approx = await fetchApproxVisitorLocation();
+                await applyHudLocation({
+                    latitude: approx.latitude,
+                    longitude: approx.longitude,
+                    label: approx.label,
+                    timezone: approx.timezone,
+                    resolveLabel: false,
+                    activeKey: 'VISITOR_LOCATION'
+                });
+            } catch {
+                applyPresetLocation('HONG_KONG');
+            }
+        }
+
+        function applyVisitorLocation() {
+            setPlaceSelection('VISITOR_LOCATION');
+            setPlaceLabel('LOCATING...');
+
+            if (navigator.geolocation && window.isSecureContext) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        applyHudLocation(
-                            position.coords.latitude,
-                            position.coords.longitude,
-                            'LOCAL'
-                        );
+                    async (position) => {
+                        await applyHudLocation({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            label: 'VISITOR LOCATION',
+                            timezone: HONG_KONG_FALLBACK.timezone,
+                            resolveLabel: true,
+                            activeKey: 'VISITOR_LOCATION'
+                        });
                     },
-                    () => {
-                        applyHudLocation(
-                            HONG_KONG_FALLBACK.latitude,
-                            HONG_KONG_FALLBACK.longitude,
-                            HONG_KONG_FALLBACK.label
-                        );
+                    async () => {
+                        await applyApproximateVisitorLocation();
                     },
                     {
                         enableHighAccuracy: false,
@@ -806,13 +1186,59 @@
                         maximumAge: 600000
                     }
                 );
-            } else {
-                applyHudLocation(
-                    HONG_KONG_FALLBACK.latitude,
-                    HONG_KONG_FALLBACK.longitude,
-                    HONG_KONG_FALLBACK.label
-                );
+                return;
             }
+
+            applyApproximateVisitorLocation();
+        }
+
+        async function handlePlaceSelection(placeKey) {
+            if (placePicker) placePicker.open = false;
+
+            if (placeKey === 'VISITOR_LOCATION') {
+                applyVisitorLocation();
+                return;
+            }
+
+            applyPresetLocation(placeKey);
+        }
+
+        function bindPlacePicker() {
+            if (placeMenu) {
+                placeMenu.addEventListener('pointerdown', (event) => {
+                    const option = event.target.closest('.place-option');
+                    if (!option) return;
+                    event.preventDefault();
+                    event.stopPropagation();
+                    handlePlaceSelection(option.dataset.place);
+                });
+            }
+
+            placeOptions.forEach((option) => {
+                option.addEventListener('click', (event) => {
+                    event.preventDefault();
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (placePicker?.open && !placePicker.contains(event.target)) {
+                    placePicker.open = false;
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && placePicker?.open) {
+                    placePicker.open = false;
+                }
+            });
+        }
+
+        function initHud() {
+            setPlaceLabel('HONG KONG');
+            setPlaceSelection('HONG_KONG');
+            startClock(HONG_KONG_FALLBACK.timezone);
+            bindPlacePicker();
+            applyPresetLocation('HONG_KONG');
         }
 
         initHud();
